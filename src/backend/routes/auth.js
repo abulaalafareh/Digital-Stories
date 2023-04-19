@@ -9,7 +9,7 @@ const JWT_SECRET = "abc1234$$";
 // Create a User using : POST "/auth/" dosent require authentication
 
 router.post(
-  "/",
+  "/register",
   [
     body("email", "Enter a valid email").isEmail(),
 
@@ -67,6 +67,57 @@ router.post(
       console.error(error.message);
 
       res.status(500).send("some error occurred");
+    }
+  }
+);
+
+// Login a User using : POST "/auth/login" dosent require authentication
+
+router.post(
+  "/login",
+  // get data for login
+  [
+    body("email", "Enter a valid email").isEmail(),
+    body("password", "Enter correct credentials").exists(),
+  ],
+
+  async (req, res) => {
+    // if there are errors return bad request and the error
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    // cheacking if the user already exists
+    const { email, password } = req.body;
+    try {
+      let user = await User.findOne({ email });
+
+      if (!user) {
+        return res.status(400).json({ error: "Enter correct credentials" });
+      }
+      // compare the entered password with saved password
+      const passwordCompare = await bcrypt.compare(password, user.password);
+
+      if (!passwordCompare) {
+        return res.status(400).json({ error: "Enter correct credentials" });
+      }
+
+      // get user id as data
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      // generate jwt authentication token
+      const authToken = jwt.sign(data, JWT_SECRET);
+
+      res.json({ authToken, msg: "login successfull" });
+    } catch (error) {
+      console.error(error.message);
+
+      res.status(500).send("Internal server error");
     }
   }
 );
