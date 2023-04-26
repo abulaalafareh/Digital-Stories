@@ -4,7 +4,7 @@ const User = require("../models/Users");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
-
+var fetchUser = require("../middleware/fetchUser");
 const JWT_SECRET = "abc1234$$";
 // Create a User using : POST "/auth/" dosent require authentication
 
@@ -121,5 +121,33 @@ router.post(
     }
   }
 );
+
+// get a logged in user data : POST "/auth/getuser"  :requires authentication
+
+router.post("/getuser", fetchUser, async (req, res) => {
+  try {
+    const userId = req.user.id;
+    // select everything except password
+    const user = await User.findById(userId).select("-password");
+    res.send(user);
+  } catch (error) {
+    console.error(error.message);
+
+    res.status(500).send("Internal server error");
+  }
+});
+
+// logout a User using: DELETE "/auth/logout"  :requires authentication
+
+router.delete("/logout", fetchUser, async (req, res) => {
+  try {
+    // update the token expiration time to a past date
+    res.setHeader("auth-token", "");
+    res.json({ msg: "Logout successful" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal server error");
+  }
+});
 
 module.exports = router;
