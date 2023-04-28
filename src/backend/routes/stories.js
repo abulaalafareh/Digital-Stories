@@ -3,6 +3,18 @@ const Stories = require("../models/Stories");
 const express = require("express");
 const router = express.Router();
 const { body, validationResult } = require("express-validator");
+const multer = require("multer");
+
+const Storage = multer.diskStorage({
+  destination: "uploads",
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({
+  storage: Storage,
+}).single("testImage");
 
 // ROUTE 1 : GET all the stories for a logged in user: using GET : "/stories/fetchallstories" : Login required
 router.get("/fetchallstories", fetchUser, async (req, res) => {
@@ -26,28 +38,29 @@ router.post(
     body("story", "Minimum length story should be 3").isLength({ min: 3 }),
   ],
   async (req, res) => {
-    try {
-      const { title, discription, story } = req.body;
+    upload(req, res, (err) => {
+      try {
+        if (err) {
+          console.log("err");
+        } else {
+          const newStory = new Stories({
+            title: req.body.title,
+            description: req.body.description,
+            story: {
+              data: req.file.filename,
+              contentType: "image/png",
+            },
+            user: req.user.id,
+          });
+          newStory.save();
+          res.send("Story uploaded");
+        }
+      } catch (error) {
+        console.error(error.message);
 
-      const errors = validationResult(req);
-
-      if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        res.status(500).send("Internal server error");
       }
-
-      const user_story = new Stories({
-        title,
-        discription,
-        story,
-        user: req.user.id,
-      });
-      const savedStory = await user_story.save();
-      res.json(savedStory);
-    } catch (error) {
-      console.error(error.message);
-
-      res.status(500).send("Internal server error");
-    }
+    });
   }
 );
 
@@ -61,14 +74,14 @@ router.put(
   ],
   async (req, res) => {
     try {
-      const { title, discription, story } = req.body;
+      const { title, description, story } = req.body;
       // update a story
       const newStory = {};
       if (title) {
         newStory.title = title;
       }
-      if (discription) {
-        newStory.discription = discription;
+      if (description) {
+        newStory.description = description;
       }
       if (story) {
         newStory.story = story;
@@ -122,3 +135,38 @@ router.delete("/deletestory/:id", fetchUser, async (req, res) => {
 });
 
 module.exports = router;
+
+// simple text story upload code
+
+// router.post(
+//   "/addstory",
+//   fetchUser,
+//   [
+//     body("title", "Minimum length title should be 3").isLength({ min: 3 }),
+//     body("story", "Minimum length story should be 3").isLength({ min: 3 }),
+//   ],
+//   async (req, res) => {
+//     try {
+//       const { title, description, story } = req.body;
+
+//       const errors = validationResult(req);
+
+//       if (!errors.isEmpty()) {
+//         return res.status(400).json({ errors: errors.array() });
+//       }
+
+//       const user_story = new Stories({
+//         title,
+//         description,
+//         story,
+//         user: req.user.id,
+//       });
+//       const savedStory = await user_story.save();
+//       res.json(savedStory);
+//     } catch (error) {
+//       console.error(error.message);
+
+//       res.status(500).send("Internal server error");
+//     }
+//   }
+// );

@@ -10,7 +10,7 @@ const storySchema = new Schema({
     type: String,
     required: true,
   },
-  discription: {
+  description: {
     type: String,
   },
   status: {
@@ -18,9 +18,8 @@ const storySchema = new Schema({
     default: 0, // 0 : private , 1 : Public
   },
   story: {
-    // data: Buffer
-    type: String, // buffer stores data in binary so it can be image/video/audio etc
-    required: true,
+    data: Buffer,
+    contentType: String, // buffer stores data in binary so it can be image/video/audio etc
   },
 });
 

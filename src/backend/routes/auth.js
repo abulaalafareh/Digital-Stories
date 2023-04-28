@@ -8,8 +8,22 @@ var fetchUser = require("../middleware/fetchUser");
 const JWT_SECRET = "abc1234$$";
 // Create a User using : POST "/auth/" dosent require authentication
 
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploadsDP/"); // Set the destination folder for uploaded files
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname); // Use the original file name for the uploaded file
+  },
+});
+
+const upload = multer({ storage: storage });
+
 router.post(
   "/register",
+  upload.single("image"), // Handle single file upload with field name "image"
   [
     body("email", "Enter a valid email").isEmail(),
 
@@ -33,32 +47,31 @@ router.post(
 
       if (user) {
         return res
-
           .status(400)
-
           .json({ error: "This username is already in use" });
       }
+
       // encrypt the password with hashing it and adding salt for increased security
       const salt = await bcrypt.genSalt(10);
 
       let secPass = await bcrypt.hash(req.body.password, salt);
 
-      // create a new user
+      // create a new user with image field set to the path of the uploaded file (if any)
       user = await User.create({
         name: req.body.name,
-
         email: req.body.email,
-
         username: req.body.username,
-
         password: secPass,
+        image: req.file ? req.file.filename : null, // set image field to path of uploaded file if it exists, otherwise set it to null
       });
+
       // get user id as data
       const data = {
         user: {
           id: user.id,
         },
       };
+
       // generate jwt authentication token
       const authToken = jwt.sign(data, JWT_SECRET);
 
