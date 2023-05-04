@@ -35,6 +35,7 @@ router.post(
   ],
 
   async (req, res) => {
+    console.log("here");
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -62,9 +63,13 @@ router.post(
         email: req.body.email,
         username: req.body.username,
         password: secPass,
-        image: req.file ? req.file.filename : null, // set image field to path of uploaded file if it exists, otherwise set it to null
+        image: {
+          data: req.file ? req.file.filename : null,
+          contentType: "image/png",
+          // set image field to path of uploaded file if it exists, otherwise set it to null
+        },
       });
-
+      console.log(req.file.filename);
       // get user id as data
       const data = {
         user: {
@@ -73,9 +78,9 @@ router.post(
       };
 
       // generate jwt authentication token
-      const authToken = jwt.sign(data, JWT_SECRET);
+      const Authentication = jwt.sign(data, JWT_SECRET);
 
-      res.json({ authToken });
+      res.json({ Authentication });
     } catch (error) {
       console.error(error.message);
 
@@ -104,6 +109,7 @@ router.post(
 
     // cheacking if the user already exists
     const { email, password } = req.body;
+    console.log(email, password);
     try {
       let user = await User.findOne({ email });
 
@@ -124,9 +130,9 @@ router.post(
         },
       };
       // generate jwt authentication token
-      const authToken = jwt.sign(data, JWT_SECRET);
-
-      res.json({ authToken, msg: "login successfull" });
+      const Authentication = jwt.sign(data, JWT_SECRET);
+      console.log("in login", Authentication);
+      res.json({ Authentication, msg: "login successfull" });
     } catch (error) {
       console.error(error.message);
 
@@ -138,6 +144,7 @@ router.post(
 // get a logged in user data : POST "/auth/getuser"  :requires authentication
 
 router.post("/getuser", fetchUser, async (req, res) => {
+  console.log("in getuser", req.header("Authentication")); // print Authentication header value
   try {
     const userId = req.user.id;
     // select everything except password
@@ -155,7 +162,7 @@ router.post("/getuser", fetchUser, async (req, res) => {
 router.delete("/logout", fetchUser, async (req, res) => {
   try {
     // update the token expiration time to a past date
-    res.setHeader("auth-token", "");
+    res.setHeader("Authentication", "");
     res.json({ msg: "Logout successful" });
   } catch (error) {
     console.error(error.message);

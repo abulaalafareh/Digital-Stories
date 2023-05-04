@@ -18,6 +18,7 @@ const userSchema = new Schema({
 
   image: {
     data: Buffer,
+    contentType: String, // buffer stores data in binary so it can be image/video/audio etc
   },
 
   password: {
