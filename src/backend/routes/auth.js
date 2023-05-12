@@ -109,7 +109,7 @@ router.post(
 
     // cheacking if the user already exists
     const { email, password } = req.body;
-    console.log(email, password);
+    // console.log(email, password);
     try {
       let user = await User.findOne({ email });
 
@@ -131,7 +131,7 @@ router.post(
       };
       // generate jwt authentication token
       const Authentication = jwt.sign(data, JWT_SECRET);
-      console.log("in login", Authentication);
+      // console.log("in login", Authentication);
       res.json({ Authentication, msg: "login successfull" });
     } catch (error) {
       console.error(error.message);
@@ -144,7 +144,7 @@ router.post(
 // get a logged in user data : POST "/auth/getuser"  :requires authentication
 
 router.post("/getuser", fetchUser, async (req, res) => {
-  console.log("in getuser", req.header("Authentication")); // print Authentication header value
+  // console.log("in getuser", req.header("Authentication")); // print Authentication header value
   try {
     const userId = req.user.id;
     // select everything except password

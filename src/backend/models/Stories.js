@@ -6,20 +6,43 @@ const storySchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  title: {
-    type: String,
-    required: true,
-  },
+  // title: {
+  //   type: String,
+  //   required: true,
+  // },
   description: {
+    type: String,
+  },
+  type: {
     type: String,
   },
   status: {
     type: Boolean,
-    default: 0, // 0 : private , 1 : Public
+    default: false, // false : private , true : Public
   },
-  story: {
+  multimedia: {
     data: Buffer,
-    contentType: String, // buffer stores data in binary so it can be image/video/audio etc
+    contentType: "String", // buffer stores data in binary so it can be image/video/audio etc
+  },
+  text: {
+    type: String,
+    default: null,
+  },
+  color: {
+    type: String,
+    default: null,
+  },
+  background_color: {
+    type: String,
+    default: null,
+  },
+  font: {
+    type: String,
+    default: null,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
   },
 });
 

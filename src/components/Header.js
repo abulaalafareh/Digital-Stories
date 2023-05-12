@@ -48,7 +48,7 @@ const Header = () => {
             <li className="nav-item">
               <Link
                 className="nav-link active"
-                to="/"
+                to="/Home"
                 style={{ color: "#64FFDA" }}
               >
                 Home

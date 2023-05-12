@@ -45,12 +45,12 @@ const Landing = () => {
           formData
         );
         // handle successful login
-        console.log(response);
+        // console.log(response);
         if (response) {
           const auth = response.data.Authentication;
-          console.log(auth);
+          // console.log(auth);
           let { id, username, Authentication, email, picture } = userState.user;
-          console.log("auth : ", auth);
+          // console.log("auth : ", auth);
           try {
             const response = await axios.post(
               "http://localhost:5000/auth/getuser",
@@ -68,7 +68,7 @@ const Landing = () => {
             picture = response.data.image.data;
             dispatch(setUser({ id, username, email, Authentication, picture }));
 
-            console.log(response.data);
+            // console.log(response.data);
           } catch (error) {
             console.log("error ere", error);
           }
@@ -82,10 +82,9 @@ const Landing = () => {
           "http://localhost:5000/auth/register",
           formDataWithImage
         );
-        // handle successful registration
       }
     } catch (error) {
-      // handle error
+      console.log("error:", error);
     }
   };
 
@@ -138,7 +137,7 @@ const Landing = () => {
           <h1 style={{ color: "#134074" }}>
             {showLogin ? "Login" : "Register"}
           </h1>
-          <Form>
+          <Form encType="multipart/form-data">
             {showLogin ? null : (
               <Form.Group controlId="formBasicName">
                 <Form.Label>Name</Form.Label>

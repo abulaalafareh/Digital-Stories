@@ -2,7 +2,7 @@ var fetchUser = require("../middleware/fetchUser");
 const Stories = require("../models/Stories");
 const express = require("express");
 const router = express.Router();
-const { body, validationResult } = require("express-validator");
+const { body } = require("express-validator");
 const multer = require("multer");
 
 const Storage = multer.diskStorage({
@@ -14,10 +14,10 @@ const Storage = multer.diskStorage({
 
 const upload = multer({
   storage: Storage,
-}).single("testImage");
+}).single("image");
 
 // ROUTE 1 : GET all the stories for a logged in user: using GET : "/stories/fetchallstories" : Login required
-router.get("/fetchallstories", fetchUser, async (req, res) => {
+router.get("/fetchalluserstories", fetchUser, async (req, res) => {
   try {
     const stories = await Stories.find({ user: req.user.id });
 
@@ -34,27 +34,37 @@ router.post(
   "/addstory",
   fetchUser,
   [
-    body("title", "Minimum length title should be 3").isLength({ min: 3 }),
-    body("story", "Minimum length story should be 3").isLength({ min: 3 }),
+    body("type", "Type is required").notEmpty(),
+    body("story.data", "Story data is required").notEmpty(),
   ],
   async (req, res) => {
-    upload(req, res, (err) => {
+    upload(req, res, async (err) => {
       try {
-        if (err) {
-          console.log("err");
-        } else {
-          const newStory = new Stories({
-            title: req.body.title,
-            description: req.body.description,
-            story: {
-              data: req.file.filename,
-              contentType: "image/png",
-            },
-            user: req.user.id,
-          });
-          newStory.save();
-          res.send("Story uploaded");
+        let data = null;
+        if (req.file && req.file.filename) {
+          data = {
+            data: req.file.filename,
+            contentType: req.body.contentType,
+          };
+          console.log("data", data);
         }
+        console.log(req.body);
+        const newStory = new Stories({
+          type: req.body.type,
+          status: req.body.status,
+          description: req.body.description,
+          multimedia: data,
+          contentType: req.body.contentType,
+          text: req.body.text,
+          color: req.body.color,
+          font: req.body.font,
+          background_color: req.body.background_color,
+          user: req.user.id,
+        });
+
+        await newStory.save();
+        res.send("Story uploaded");
+        console.log(newStory);
       } catch (error) {
         console.error(error.message);
 
@@ -68,45 +78,57 @@ router.post(
 router.put(
   "/updatestory/:id",
   fetchUser,
-  [
-    body("title", "Minimum length title should be 3").isLength({ min: 3 }),
-    body("story", "Minimum length story should be 3").isLength({ min: 3 }),
-  ],
+  [body("type", "Type is required").notEmpty()],
   async (req, res) => {
-    try {
-      const { title, description, story } = req.body;
-      // update a story
-      const newStory = {};
-      if (title) {
-        newStory.title = title;
-      }
-      if (description) {
-        newStory.description = description;
-      }
-      if (story) {
-        newStory.story = story;
-      }
-      console.log(newStory);
+    upload(req, res, async (err) => {
+      try {
+        const { text, status, background_color, color, font, description } =
+          req.body;
+        // console.log(text, status, background_color, color, font);
+        // update a story
+        const newStory = {};
+        if (text) {
+          newStory.text = text;
+        }
+        if (description) {
+          newStory.description = description;
+        }
+        if (status !== undefined) {
+          newStory.status = status;
+        }
+        if (color) {
+          newStory.color = color;
+        }
+        if (background_color) {
+          newStory.background_color = background_color;
+        }
+        if (font) {
+          newStory.font = font;
+        }
+        console.log(newStory);
 
-      var user_story = await Stories.findById(req.params.id);
-      if (!user_story) {
-        return res.status(404).send("Not Found");
-      }
-      if (user_story.user.toString() !== req.user.id) {
-        return res.status(401).send("Invalid Request");
-      }
+        var user_story = await Stories.findById(req.params.id);
+        if (!user_story) {
+          return res.status(404).send("Not Found");
+        }
+        if (user_story.user.toString() !== req.user.id) {
+          return res.status(401).send("Invalid Request");
+        }
 
-      user_story = await Stories.findByIdAndUpdate(
-        req.params.id,
-        { $set: newStory },
-        { new: true }
-      );
-      res.json(user_story);
-    } catch (error) {
-      console.error(error.message);
+        if (req.file && req.file.filename) {
+          newStory.story.data = req.file.filename;
+          newStory.story.contentType = req.file.mimetype;
+        }
 
-      res.status(500).send("Internal server error");
-    }
+        await Stories.findByIdAndUpdate(req.params.id, { $set: newStory });
+        const updatedStory = await Stories.findById(req.params.id);
+        res.json(updatedStory);
+      } catch (error) {
+        console.error(error.message);
+
+        res.status(500).send("Internal server error");
+      }
+    });
   }
 );
 
@@ -130,6 +152,17 @@ router.delete("/deletestory/:id", fetchUser, async (req, res) => {
   } catch (error) {
     console.error(error.message);
 
+    res.status(500).send("Internal server error");
+  }
+});
+// Route 5 fetch all stories from database : login required
+router.get("/fetchallstories", async (req, res) => {
+  try {
+    const stories = await Stories.find();
+
+    res.json(stories);
+  } catch (error) {
+    console.error(error.message);
     res.status(500).send("Internal server error");
   }
 });
