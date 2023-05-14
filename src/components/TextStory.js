@@ -66,6 +66,7 @@ const TextStory = ({ color, background_color, text, font, postId }) => {
         `http://localhost:5000/comments/addcomment/story/${postId}`,
         {
           body: comment,
+          username: username,
         },
         {
           headers: {
@@ -161,15 +162,32 @@ const TextStory = ({ color, background_color, text, font, postId }) => {
       </Col>
       <Col md={4}>
         <Card
-          style={{ width: "100%", backgroundColor: "#34495e", color: "white" }}
+          style={{
+            width: "100%",
+            backgroundColor: "#34495e",
+            color: "white",
+            marginTop: "20px",
+          }}
         >
           <Card.Body>
             <Card.Title>Comments</Card.Title>
-            <Card.Text>
+            <Card.Text style={{ maxHeight: "350px", overflowY: "auto" }}>
               {comments.map((comment) => (
-                <p key={comment.id}>
-                  {comment.username}: {comment.body}
-                </p>
+                <div
+                  key={comment.id}
+                  style={{
+                    backgroundColor: "darkgrey",
+                    padding: "5px",
+                    borderRadius: "5px",
+                    marginBottom: "5px",
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <span style={{ color: "red" }}>{comment.username}</span>
+                  <hr style={{ color: "black" }}></hr>
+                  <span style={{ color: "green" }}>{comment.body}</span>
+                </div>
               ))}
             </Card.Text>
 

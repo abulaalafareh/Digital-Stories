@@ -13,6 +13,9 @@ const commentSchema = new Schema({
   body: {
     type: String,
   },
+  username: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now,

@@ -22,7 +22,7 @@ router.post(
   [body("body", "Minimum length of comment should be 1").isLength({ min: 1 })],
   async (req, res) => {
     try {
-      const { body } = req.body;
+      // const { body } = req.body;
 
       const errors = validationResult(req);
 
@@ -33,7 +33,8 @@ router.post(
       const newComment = new Comment({
         user: req.user.id,
         story: req.params.storyId,
-        body,
+        body: req.body.body,
+        username: req.body.username,
       });
 
       const comment = await newComment.save();
