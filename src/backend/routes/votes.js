@@ -46,7 +46,7 @@ router.post("/upvote/:storyId", fetchUser, async (req, res) => {
         user: req.user.id,
         story: storyId,
       });
-      console.log("mark5");
+      // console.log("mark5");
       await vote.save();
       return res.status(200).json({ msg: "Upvoted!" });
     }

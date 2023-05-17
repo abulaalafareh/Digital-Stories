@@ -46,9 +46,9 @@ router.post(
             data: req.file.filename,
             contentType: req.body.contentType,
           };
-          console.log("data", data);
+          // console.log("data", data);
         }
-        console.log(req.body);
+        // console.log(req.body);
         const newStory = new Stories({
           type: req.body.type,
           status: req.body.status,
@@ -64,7 +64,7 @@ router.post(
 
         await newStory.save();
         res.send("Story uploaded");
-        console.log(newStory);
+        // console.log(newStory);
       } catch (error) {
         console.error(error.message);
 
@@ -105,7 +105,7 @@ router.put(
         if (font) {
           newStory.font = font;
         }
-        console.log(newStory);
+        // console.log(newStory);
 
         var user_story = await Stories.findById(req.params.id);
         if (!user_story) {

@@ -19,5 +19,5 @@ app.use("/comments", require("./routes/comments"));
 app.use("/vote", require("./routes/votes"));
 
 app.listen(port, () => {
-  console.log(`Example app listening on port http://localhost:${port}`);
+  console.log(`Digital Stories app listening on port http://localhost:${port}`);
 });

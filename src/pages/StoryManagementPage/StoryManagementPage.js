@@ -87,88 +87,95 @@ const StoryManagementPage = () => {
   };
 
   return (
-    <Container>
-      <Row className="flex-row">
-        {post.map((p) =>
-          p.type === "text" ? (
-            <TextStoryManagementGrid
-              key={p._id}
-              color={p.color}
-              background_color={p.background_color}
-              text={p.text}
-              font={p.font}
-              postId={p._id} // pass _id as a regular prop
-            />
-          ) : (
-            <StoryManagementGrid
-              key={p._id}
-              description={p.description}
-              multimedia={p.multimedia}
-              imageUrl={"https://via.placeholder.com/600x400"}
-              postId={p._id} // pass _id as a regular prop
-            />
-          )
+    <div style={{ backgroundColor: "#134074" }}>
+      <Container>
+        <div style={{ overflowX: "auto", padding: "20px" }}>
+          <Row className="flex-nowrap" style={{ marginTop: "50px" }}>
+            {post.map((p) =>
+              p.type === "text" ? (
+                <TextStoryManagementGrid
+                  key={p._id}
+                  color={p.color}
+                  background_color={p.background_color}
+                  text={p.text}
+                  font={p.font}
+                  postId={p._id}
+                />
+              ) : (
+                <StoryManagementGrid
+                  key={p._id}
+                  description={p.description}
+                  multimedia={p.multimedia}
+                  imageUrl={"https://via.placeholder.com/600x400"}
+                  postId={p._id}
+                />
+              )
+            )}
+          </Row>
+        </div>
+        <br></br>
+        <br></br>
+        <br></br>
+        {/* <h1 className="text-center my-5">Create Story</h1> */}
+        <Row className="justify-content-around">
+          <Col md={4}>
+            <Card style={card1Style}>
+              <Card.Body onClick={onClickTextHandler}>
+                <Card.Title>Text Story</Card.Title>
+                <Card.Text>Write what you want the world to read</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={4}>
+            <Card style={card2Style}>
+              <Card.Body onClick={onClickImageHandler}>
+                <Card.Title>Image Story</Card.Title>
+                <Card.Text>Show what you want the world to see</Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md={4}>
+            <Card style={card3Style}>
+              <Card.Body onClick={onClickVideoHandler}>
+                <Card.Title>Video Story</Card.Title>
+                <Card.Text>
+                  Make your experience the world's experience
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+        {showTextForm && (
+          <StoryForm
+            show={showTextForm}
+            handleClose={() => setShowTextForm(false)}
+            handleSubmit={() => {
+              handleSubmit();
+            }}
+          />
         )}
-      </Row>
-      <hr></hr>
-      <hr></hr>
-      {/* <h1 className="text-center my-5">Create Story</h1> */}
-      <Row className="justify-content-around">
-        <Col md={4}>
-          <Card style={card1Style}>
-            <Card.Body onClick={onClickTextHandler}>
-              <Card.Title>Text Story</Card.Title>
-              <Card.Text>Write what you want the world to read</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={4}>
-          <Card style={card2Style}>
-            <Card.Body onClick={onClickImageHandler}>
-              <Card.Title>Image Story</Card.Title>
-              <Card.Text>Show what you want the world to see</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={4}>
-          <Card style={card3Style}>
-            <Card.Body onClick={onClickVideoHandler}>
-              <Card.Title>Video Story</Card.Title>
-              <Card.Text>Make your experience the world's experience</Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-      {showTextForm && (
-        <StoryForm
-          show={showTextForm}
-          handleClose={() => setShowTextForm(false)}
-          handleSubmit={() => {
-            handleSubmit();
-          }}
-        />
-      )}
-      {showImageForm && (
-        <ImageStoryForm
-          show={showImageForm}
-          handleClose={() => setShowImageForm(false)}
-          handleSubmit={(title, description, file) => {
-            handleSubmit();
-            console.log(title, description, file);
-          }}
-        />
-      )}
-      {showVideoForm && (
-        <VideoStoryForm
-          show={showVideoForm}
-          handleClose={() => setShowVideoForm(false)}
-          handleSubmit={(title, description, file) => {
-            handleSubmit();
-            console.log(title, description, file);
-          }}
-        />
-      )}
-    </Container>
+        {showImageForm && (
+          <ImageStoryForm
+            show={showImageForm}
+            handleClose={() => setShowImageForm(false)}
+            handleSubmit={(title, description, file) => {
+              handleSubmit();
+              console.log(title, description, file);
+            }}
+          />
+        )}
+        {showVideoForm && (
+          <VideoStoryForm
+            show={showVideoForm}
+            handleClose={() => setShowVideoForm(false)}
+            handleSubmit={(title, description, file) => {
+              handleSubmit();
+              console.log(title, description, file);
+            }}
+          />
+        )}
+      </Container>
+    </div>
   );
 };
 

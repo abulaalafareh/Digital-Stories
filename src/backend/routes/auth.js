@@ -35,7 +35,7 @@ router.post(
   ],
 
   async (req, res) => {
-    console.log("here");
+    // console.log("here");
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -69,7 +69,7 @@ router.post(
           // set image field to path of uploaded file if it exists, otherwise set it to null
         },
       });
-      console.log(req.file.filename);
+      // console.log(req.file.filename);
       // get user id as data
       const data = {
         user: {
@@ -164,6 +164,25 @@ router.delete("/logout", fetchUser, async (req, res) => {
     // update the token expiration time to a past date
     res.setHeader("Authentication", "");
     res.json({ msg: "Logout successful" });
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Internal server error");
+  }
+});
+
+// GET "/auth/user/:id" route: Get user data by ID (requires authentication)
+router.get("/user/:id", fetchUser, async (req, res) => {
+  try {
+    const requestedUserId = req.params.id;
+
+    // Find the user in the database
+    const user = await User.findById(requestedUserId).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json(user);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal server error");

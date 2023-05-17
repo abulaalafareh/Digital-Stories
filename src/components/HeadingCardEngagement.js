@@ -15,7 +15,7 @@ const HeadingCardEngagement = () => {
       <Card.Body className="d-flex align-items-center">
         <div className="flex-grow-1">
           <Card.Text className="m-0" style={{ color: "#212529" }}>
-            Username
+            Story
           </Card.Text>
           {}
         </div>

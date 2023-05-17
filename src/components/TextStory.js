@@ -3,8 +3,21 @@ import { Card, Col, Row, Form, Button } from "react-bootstrap";
 import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import axios from "axios";
 import { useSelector } from "react-redux";
-const TextStory = ({ color, background_color, text, font, postId }) => {
+import { ReactionContext } from "../contextApi/ReactionContext";
+import { useContext } from "react";
+const TextStory = ({
+  color,
+  background_color,
+  text,
+  font,
+  postId,
+  username_,
+}) => {
+  const { updateComments, updateUpvotes, updateDownvotes } =
+    useContext(ReactionContext);
+  // console.log(color, background_color, text, font, postId, username_);
   const userState = useSelector((state) => state.userReducer);
+
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [upvotes, setUpvotes] = useState(0);
@@ -18,6 +31,7 @@ const TextStory = ({ color, background_color, text, font, postId }) => {
           `http://localhost:5000/comments/fetchallcomments/story/${postId}`
         );
         setComments(response.data);
+        updateComments(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -34,6 +48,7 @@ const TextStory = ({ color, background_color, text, font, postId }) => {
           `http://localhost:5000/vote/upvotes/${postId}`
         );
         setUpvotes(response.data.length);
+        updateUpvotes(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -45,6 +60,7 @@ const TextStory = ({ color, background_color, text, font, postId }) => {
           `http://localhost:5000/vote/downvotes/${postId}`
         );
         setDownvotes(response.data.length);
+        updateDownvotes(response.data);
       } catch (error) {
         console.error(error);
       }
@@ -102,8 +118,8 @@ const TextStory = ({ color, background_color, text, font, postId }) => {
         <Card
           style={{
             width: "100%",
-            backgroundColor: "#2c3e50",
-            color: "white",
+            backgroundColor: "#2F4858",
+            color: "#ffffff",
             marginBottom: "35px",
           }}
         >
@@ -121,21 +137,14 @@ const TextStory = ({ color, background_color, text, font, postId }) => {
               resize: "none", // Prevent resizing the textarea
               fontSize: "40px",
             }}
-            value={text} // Use value instead of children to set the text
-            readOnly // Set readOnly to prevent the user from editing the text
+            value={text}
+            readOnly
           />
           <Card.Body style={{ maxHeight: "200px", overflow: "auto" }}>
             <Row className="align-items-center">
-              <Col xs={2}>
-                {/* <img
-                  src={post.profilePicUrl}
-                  className="rounded-circle"
-                  alt={post.username}
-                  style={{ width: "50px", height: "50px", objectFit: "cover" }}
-                /> */}
-              </Col>
+              <Col xs={2}></Col>
               <Col xs={6}>
-                <Card.Title>{"username"}</Card.Title>
+                <Card.Title>{username_}</Card.Title>
               </Col>
               <Col xs={4} className="text-right">
                 <div
@@ -164,8 +173,8 @@ const TextStory = ({ color, background_color, text, font, postId }) => {
         <Card
           style={{
             width: "100%",
-            backgroundColor: "#34495e",
-            color: "white",
+            backgroundColor: "#B7C8FA",
+            color: "#ffffff",
             marginTop: "20px",
           }}
         >
@@ -176,7 +185,7 @@ const TextStory = ({ color, background_color, text, font, postId }) => {
                 <div
                   key={comment.id}
                   style={{
-                    backgroundColor: "darkgrey",
+                    backgroundColor: "#86BBD8",
                     padding: "5px",
                     borderRadius: "5px",
                     marginBottom: "5px",
@@ -184,9 +193,9 @@ const TextStory = ({ color, background_color, text, font, postId }) => {
                     flexDirection: "column",
                   }}
                 >
-                  <span style={{ color: "red" }}>{comment.username}</span>
-                  <hr style={{ color: "black" }}></hr>
-                  <span style={{ color: "green" }}>{comment.body}</span>
+                  <span style={{ color: "#2F4858" }}>{comment.username}</span>
+                  <hr style={{ color: "#ffffff" }}></hr>
+                  <span style={{ color: "#2F4858" }}>{comment.body}</span>
                 </div>
               ))}
             </Card.Text>
@@ -201,7 +210,12 @@ const TextStory = ({ color, background_color, text, font, postId }) => {
                   placeholder="Write a comment"
                 />
               </Form.Group>
-              <Button type="submit">Submit</Button>
+              <Button
+                type="submit"
+                style={{ backgroundColor: "#2F4858", borderColor: "#2F4858" }}
+              >
+                Submit
+              </Button>
             </Form>
           </Card.Body>
         </Card>

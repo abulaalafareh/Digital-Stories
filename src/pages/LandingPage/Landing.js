@@ -3,6 +3,8 @@ import { Form, Button } from "react-bootstrap";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { setUser } from "../../redux/StoryActions";
+import { useNavigate } from "react-router-dom";
+
 const Landing = () => {
   const userState = useSelector((state) => state.userReducer);
   const dispatch = useDispatch();
@@ -35,6 +37,7 @@ const Landing = () => {
       image: file,
     }));
   };
+  const navigate = useNavigate();
 
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -62,13 +65,14 @@ const Landing = () => {
               }
             );
             email = response.data.email;
-            id = response.data.id;
+            id = response.data._id;
             username = response.data.username;
             Authentication = auth;
-            picture = response.data.image.data;
+            picture = response.data.image ? response.data.image.data : null;
             dispatch(setUser({ id, username, email, Authentication, picture }));
 
             // console.log(response.data);
+            navigate("/Home");
           } catch (error) {
             console.log("error ere", error);
           }
@@ -116,8 +120,8 @@ const Landing = () => {
             height: "550px",
           }}
         >
-          <h1 style={{ color: "#134074" }}>Welcome to my website</h1>
-          <p style={{ color: "#134074" }}>
+          <h1 style={{ color: "#2F4858" }}>Welcome to my website</h1>
+          <p style={{ color: "#2F4858" }}>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -134,7 +138,7 @@ const Landing = () => {
             height: "550px",
           }}
         >
-          <h1 style={{ color: "#134074" }}>
+          <h1 style={{ color: "#2F4858" }}>
             {showLogin ? "Login" : "Register"}
           </h1>
           <Form encType="multipart/form-data">
@@ -174,8 +178,8 @@ const Landing = () => {
               <>
                 <Button
                   style={{
-                    backgroundColor: "#134074",
-                    borderColor: "#134074",
+                    backgroundColor: "#2F4858",
+                    borderColor: "#2F4858",
                   }}
                   variant="primary"
                   type="submit"

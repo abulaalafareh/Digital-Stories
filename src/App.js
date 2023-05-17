@@ -6,7 +6,7 @@ import Engagement from "./pages/Engagement/Engagement";
 import Leaderboard from "./pages/Leaderboard/Leaderboard";
 import Management from "./pages/StoryManagementPage/StoryManagementPage";
 import Trending from "./pages/Trending/Trending";
-import { ReactionProvider } from "./contextApi/StoryReactionCApi";
+import { ReactionProvider } from "./contextApi/ReactionContext";
 function App() {
   return (
     <BrowserRouter>

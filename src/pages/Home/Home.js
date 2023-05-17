@@ -1,56 +1,82 @@
 import React, { useEffect } from "react";
-import Story from "../../components/Story";
 import TextStory from "../../components/TextStory";
 import axios from "axios";
 import { useState } from "react";
+import { ReactionContext } from "../../contextApi/ReactionContext";
+import { useSelector } from "react-redux";
+import { useContext } from "react";
+
 const Home = () => {
+  const userState = useSelector((state) => state.userReducer);
+  let { Authentication } = userState.user;
+
   const [post, setPost] = useState([]);
+  const { updateStories, updateUserInfo } = useContext(ReactionContext);
+  const [userInfo, setUserInfo] = useState([]);
+
   useEffect(() => {
     const getData = async () => {
       const response = await axios.get(
         "http://localhost:5000/stories/fetchallstories"
       );
       setPost(response.data);
+      updateStories(response.data);
     };
     getData();
   }, []);
-  console.log(post);
-  const posts = {
-    id: 1,
-    username: "johndoe",
-    profilePicUrl: "https://via.placeholder.com/150",
-    caption: "This is a cool photo!",
-    imageUrl: "https://via.placeholder.com/600x400",
-    timestamp: "2 hours ago",
-  };
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const userPromises = post.map(async (p) => {
+          const response = await axios.get(
+            `http://localhost:5000/auth/user/${p.user}`,
+            {
+              headers: {
+                Authentication: Authentication, // Replace with your actual JWT token
+              },
+            }
+          );
+          const userId = response.data._id;
+          const username = response.data.username;
+          const image = response.data.image;
+          return { userId, username, image };
+        });
+
+        const info = await Promise.all(userPromises);
+        setUserInfo(info);
+        updateUserInfo(info);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserDetails();
+  }, [post]);
 
   return (
     <div
       style={{ backgroundColor: "#134074", color: "white", paddingTop: "50px" }}
     >
       <div className="container">
-        {post.map((p) =>
-          p.type === "text" ? (
+        {post.map((p) => {
+          const user = userInfo.find((u) => u.userId === p.user);
+          const username = user ? user.username : ""; // Get the username from userInfo
+
+          return p.type === "text" ? (
             <TextStory
               key={p._id}
               color={p.color}
               background_color={p.background_color}
               text={p.text}
               font={p.font}
-              postId={p._id} // pass _id as a regular prop
+              postId={p._id}
+              username_={username} // Pass the username as a prop
             />
           ) : (
             <h1>Story</h1>
-            // <Story
-            //   key={p._id}
-            //   posts
-            //   description={p.description}
-            //   multimedia={p.multimedia}
-            //   imageUrl={"https://via.placeholder.com/600x400"}
-            //   postId={p._id} // pass _id as a regular prop
-            // />
-          )
-        )}
+          );
+        })}
       </div>
     </div>
   );
