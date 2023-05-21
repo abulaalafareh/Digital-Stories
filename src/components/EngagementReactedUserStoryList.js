@@ -7,15 +7,12 @@ import { useContext } from "react";
 
 const EngagementReactedUserStoryList = ({ reactedStoryList }) => {
   const { stories_ } = useContext(ReactionContext);
-  // console.log("object", stories_);
   const reactedStoryData = reactedStoryList.map((reactedStory) => {
     const { text, description } = stories_.find(
       (story) => story._id === reactedStory.storyId
     );
     return { ...reactedStory, text, description };
   });
-  console.log("reactedStoryData", reactedStoryData);
-  console.log(", reactedStoryList", reactedStoryList);
   return (
     <Container
       className="d-flex justify-content-center align-items-center vh-100"

@@ -49,8 +49,6 @@ const Trending = () => {
     fetchPosts();
   }, [comments_, upvotes_, stories_]);
 
-  // console.log("sortedStories", sortedStories);
-
   return (
     <div
       style={{ backgroundColor: "#134074", color: "white", paddingTop: "50px" }}

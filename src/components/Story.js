@@ -8,7 +8,6 @@ const Story = ({ post }) => {
   const handleCommentSubmit = (e) => {
     e.preventDefault();
     // Handle comment submission
-    console.log("Comment submitted:", comment);
     setComment("");
   };
 

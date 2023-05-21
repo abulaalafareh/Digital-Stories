@@ -61,8 +61,6 @@ const LeaderboardRankingList = ({ reactedStoryList }) => {
     };
   });
 
-  console.log(usersWithMostStories);
-  console.log("upup", upvotes_);
   return (
     <Container
       className="d-flex justify-content-center align-items-center vh-100"

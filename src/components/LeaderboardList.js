@@ -9,7 +9,6 @@ const LeaderboaradList = ({ storyList, reactedStoryList }) => {
   const [comments, setComments] = useState({});
   const [upvotes, setUpvotes] = useState({});
   const [downvotes, setDownvotes] = useState({});
-  console.log("in List", reactedStoryList);
   useEffect(() => {
     const fetchData = async () => {
       const requests = storyList.map((story) => {

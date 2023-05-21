@@ -35,7 +35,6 @@ const VideoStoryForm = ({
           },
         }
       );
-      console.log("form submitted", response);
       handleSubmit();
       handleClose();
     } else {
@@ -48,7 +47,6 @@ const VideoStoryForm = ({
           },
         }
       );
-      console.log("form submitted", response);
 
       handleSubmit(description, file);
       handleClose();

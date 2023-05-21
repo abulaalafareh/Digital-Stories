@@ -11,7 +11,6 @@ const Leaderboard = () => {
   const [posts, setPosts] = useState([]);
   const userState = useSelector((state) => state.userReducer);
   const { comments_, downvotes_, upvotes_ } = useContext(ReactionContext);
-  console.log(comments_, upvotes_, downvotes_);
 
   const { Authentication, id } = userState.user;
   useEffect(() => {
@@ -59,16 +58,11 @@ const Leaderboard = () => {
     return { storyId, commentsCount, upvotesCount, downvotesCount };
   });
 
-  console.log(storiesWithReactions);
-
-  console.log("userReactedStories", userReactedStories);
-  console.log("uniqueStoryIds", uniqueStoryIds);
   const postList = posts.map(({ _id, text, description }) => ({
     _id,
     text,
     description,
   }));
-  console.log(postList);
   return (
     <div style={{ backgroundColor: "#134074" }}>
       <LeaderboardList

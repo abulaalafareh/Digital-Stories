@@ -15,7 +15,6 @@ const TextStory = ({
 }) => {
   const { updateComments, updateUpvotes, updateDownvotes } =
     useContext(ReactionContext);
-  // console.log(color, background_color, text, font, postId, username_);
   const userState = useSelector((state) => state.userReducer);
 
   const [comment, setComment] = useState("");
@@ -69,8 +68,6 @@ const TextStory = ({
     fetchUpvotes();
     fetchDownvotes();
   }, [postId, addedvote]);
-  // console.log("fetchupvotes", upvotes);
-  // console.log("fetchupvotes", downvotes);
 
   let { username } = userState.user; // use this username to save with the comment
   let { Authentication } = userState.user;

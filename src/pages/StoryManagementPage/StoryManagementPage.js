@@ -38,22 +38,17 @@ const StoryManagementPage = () => {
     };
     getData();
   }, [render]);
-  console.log("management page data", post.multimedia);
   const onClickTextHandler = () => {
-    console.log("text");
     setShowTextForm(true);
   };
   const onClickImageHandler = () => {
-    console.log("image");
     setShowImageForm(true);
   };
   const onClickVideoHandler = () => {
-    console.log("video");
     setShowVideoForm(true);
   };
   const handleSubmit = async (event) => {
     setRender(!render);
-    return console.log("form has been submitted");
   };
   const card1Style = {
     backgroundImage: `url(${text_placeholder})`,
@@ -160,7 +155,6 @@ const StoryManagementPage = () => {
             handleClose={() => setShowImageForm(false)}
             handleSubmit={(title, description, file) => {
               handleSubmit();
-              console.log(title, description, file);
             }}
           />
         )}
@@ -170,7 +164,6 @@ const StoryManagementPage = () => {
             handleClose={() => setShowVideoForm(false)}
             handleSubmit={(title, description, file) => {
               handleSubmit();
-              console.log(title, description, file);
             }}
           />
         )}

@@ -60,7 +60,6 @@ const StoryForm = ({
           },
         }
       );
-      console.log("form submitted", response);
       handleSubmit(text, backgroundColor, textColor, font, status);
       handleClose();
     } else {
@@ -73,7 +72,6 @@ const StoryForm = ({
           },
         }
       );
-      console.log("form submitted", response);
       handleSubmit(text, backgroundColor, textColor, font, status);
       handleClose();
     }

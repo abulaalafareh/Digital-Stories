@@ -48,12 +48,9 @@ const Landing = () => {
           formData
         );
         // handle successful login
-        // console.log(response);
         if (response) {
           const auth = response.data.Authentication;
-          // console.log(auth);
           let { id, username, Authentication, email, picture } = userState.user;
-          // console.log("auth : ", auth);
           try {
             const response = await axios.post(
               "http://localhost:5000/auth/getuser",
@@ -71,7 +68,6 @@ const Landing = () => {
             picture = response.data.image ? response.data.image.data : null;
             dispatch(setUser({ id, username, email, Authentication, picture }));
 
-            // console.log(response.data);
             navigate("/Home");
           } catch (error) {
             console.log("error ere", error);

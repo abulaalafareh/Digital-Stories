@@ -20,7 +20,6 @@ const StoryManagementGrid = ({ multimedia, postId, description }) => {
       reader.readAsDataURL(blob);
     }
   }, [multimedia]);
-  // console.log(imageUrl);
   const handleMakeChanges = () => {
     setShowImageForm(true);
   };
@@ -36,7 +35,6 @@ const StoryManagementGrid = ({ multimedia, postId, description }) => {
         },
       }
     );
-    console.log(response);
 
     // Do something when the "Delete" dropdown item is clicked
   };

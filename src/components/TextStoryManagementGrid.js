@@ -30,7 +30,6 @@ const TextStoryManagementGrid = ({
         },
       }
     );
-    console.log(response);
 
     // Do something when the "Delete" dropdown item is clicked
   };
@@ -42,7 +41,6 @@ const TextStoryManagementGrid = ({
     background_color,
     visibility
   ) => {
-    console.log(text, color, font, background_color, visibility);
     setShowTextForm(false);
   };
 
