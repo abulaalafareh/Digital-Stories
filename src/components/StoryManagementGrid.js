@@ -1,14 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Dropdown } from "react-bootstrap";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import ImageStoryForm from "./ImageStoryForm";
-import { useState } from "react";
 
-const StoryManagementGrid = ({ multimedia, imageUrl, postId, description }) => {
+const StoryManagementGrid = ({ multimedia, postId, description }) => {
   const userState = useSelector((state) => state.userReducer);
   const [showImageForm, setShowImageForm] = useState(false);
-
+  const [imageUrl, setImageUrl] = useState("");
+  useEffect(() => {
+    if (multimedia) {
+      const blob = new Blob([new Uint8Array(multimedia.data.data)], {
+        type: multimedia.contentType,
+      });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageUrl(reader.result);
+      };
+      reader.readAsDataURL(blob);
+    }
+  }, [multimedia]);
+  // console.log(imageUrl);
   const handleMakeChanges = () => {
     setShowImageForm(true);
   };
@@ -28,6 +40,7 @@ const StoryManagementGrid = ({ multimedia, imageUrl, postId, description }) => {
 
     // Do something when the "Delete" dropdown item is clicked
   };
+
   const handleSubmitForm = (description) => {
     setShowImageForm(false);
   };

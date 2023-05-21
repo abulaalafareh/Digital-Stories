@@ -3,6 +3,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { ReactionContext } from "../../contextApi/ReactionContext";
 import TextStory from "../../components/TextStory";
+import MultimediaStory from "../../components/MultimediaStory";
 
 const Trending = () => {
   const [sortedStories, setSortedStories] = useState([]);
@@ -70,7 +71,13 @@ const Trending = () => {
               username_={username} // Pass the username as a prop
             />
           ) : (
-            <h1>Story</h1>
+            <MultimediaStory
+              key={p._id}
+              multimedia={p.multimedia}
+              description={p.description}
+              username_={username} // Pass the username as a prop
+              postId={p._id}
+            />
           );
         })}
       </div>

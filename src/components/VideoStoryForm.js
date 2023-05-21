@@ -17,7 +17,7 @@ const VideoStoryForm = ({
   const [file, setFile] = useState(null);
   formData.append("description", description);
   formData.append("image", file);
-  formData.append("contentType", "image/png");
+  // formData.append("contentType", "image/jpg");
   formData.append("type", "image");
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);

@@ -4,17 +4,19 @@ const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
 const multer = require("multer");
+var fs = require("fs");
+var path = require("path");
 
-const Storage = multer.diskStorage({
-  destination: "uploads",
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads"); // Adjust the path to the "uploads" directory
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + "-" + Date.now());
   },
 });
 
-const upload = multer({
-  storage: Storage,
-}).single("image");
+var upload = multer({ storage: storage }).single("image");
 
 // ROUTE 1 : GET all the stories for a logged in user: using GET : "/stories/fetchallstories" : Login required
 router.get("/fetchalluserstories", fetchUser, async (req, res) => {
@@ -43,8 +45,8 @@ router.post(
         let data = null;
         if (req.file && req.file.filename) {
           data = {
-            data: req.file.filename,
-            contentType: req.body.contentType,
+            data: fs.readFileSync(`uploads/${req.file.filename}`),
+            contentType: "image/png",
           };
           // console.log("data", data);
         }

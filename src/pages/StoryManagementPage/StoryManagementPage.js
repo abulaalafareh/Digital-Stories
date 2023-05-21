@@ -38,7 +38,7 @@ const StoryManagementPage = () => {
     };
     getData();
   }, [render]);
-
+  console.log("management page data", post.multimedia);
   const onClickTextHandler = () => {
     console.log("text");
     setShowTextForm(true);

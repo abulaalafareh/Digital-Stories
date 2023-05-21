@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import TextStory from "../../components/TextStory";
+import MultimediaStory from "../../components/MultimediaStory";
 import axios from "axios";
 import { useState } from "react";
 import { ReactionContext } from "../../contextApi/ReactionContext";
@@ -74,7 +75,13 @@ const Home = () => {
               username_={username} // Pass the username as a prop
             />
           ) : (
-            <h1>Story</h1>
+            <MultimediaStory
+              key={p._id}
+              multimedia={p.multimedia}
+              description={p.description}
+              username_={username} // Pass the username as a prop
+              postId={p._id}
+            />
           );
         })}
       </div>
