@@ -4,11 +4,19 @@ import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { ReactionContext } from "../contextApi/ReactionContext";
+import AppLogo from "./1.PNG";
 import { useContext } from "react";
-const MultimediaStory = ({ multimedia, postId, username_, description }) => {
+const MultimediaStory = ({
+  multimedia,
+  postId,
+  username_,
+  description,
+  date,
+  type,
+  user,
+}) => {
   const { updateComments, updateUpvotes, updateDownvotes } =
     useContext(ReactionContext);
-
   const userState = useSelector((state) => state.userReducer);
 
   const [comment, setComment] = useState("");
@@ -24,19 +32,48 @@ const MultimediaStory = ({ multimedia, postId, username_, description }) => {
   // Effect to fetch comments
 
   const [imageUrl, setImageUrl] = useState("");
-
+  const [videoUrl, setVideoUrl] = useState("");
+  const [picUrl, setPicUrl] = useState("");
   useEffect(() => {
     if (multimedia) {
-      const blob = new Blob([new Uint8Array(multimedia.data.data)], {
-        type: multimedia.contentType,
+      if (multimedia.contentType.startsWith("image/")) {
+        const blob = new Blob([new Uint8Array(multimedia.data.data)], {
+          type: multimedia.contentType,
+        });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImageUrl(reader.result);
+        };
+        reader.readAsDataURL(blob);
+      } else {
+        const blob = new Blob([new Uint8Array(multimedia.data.data)], {
+          type: multimedia.contentType,
+        });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setVideoUrl(reader.result);
+        };
+        reader.readAsDataURL(blob);
+        console.log("videoUrl", videoUrl, multimedia.data);
+      }
+    }
+  }, [multimedia]);
+
+  useEffect(() => {
+    if (user && user.image && user.image.data) {
+      console.log("user.image.data", user.image.data);
+      const blob = new Blob([new Uint8Array(user.image.data.data)], {
+        type: user.image.contentType,
       });
       const reader = new FileReader();
       reader.onloadend = () => {
-        setImageUrl(reader.result);
+        setPicUrl(reader.result);
       };
       reader.readAsDataURL(blob);
+    } else {
+      setPicUrl(AppLogo);
     }
-  }, [multimedia]);
+  }, []);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -83,7 +120,6 @@ const MultimediaStory = ({ multimedia, postId, username_, description }) => {
     fetchUpvotes();
     fetchDownvotes();
   }, [postId, addedvote]);
-
   let { username } = userState.user; // use this username to save with the comment
   let { Authentication } = userState.user;
 
@@ -135,21 +171,45 @@ const MultimediaStory = ({ multimedia, postId, username_, description }) => {
             marginBottom: "35px",
           }}
         >
-          <img
-            style={{
-              width: "100%",
-              height: "auto",
-              minHeight: "400px", // Set a minimum height to prevent it from becoming too small
-              padding: "10px", // Add some padding for readability
-              border: "none", // Remove the border
-              resize: "none", // Prevent resizing the textarea
-            }}
-            src={imageUrl}
-            alt=""
-          />
+          {type === "image" ? (
+            <img
+              style={{
+                width: "100%",
+                height: "auto",
+                minHeight: "400px",
+                padding: "10px",
+                border: "none",
+                resize: "none",
+              }}
+              src={imageUrl}
+              alt=""
+            />
+          ) : (
+            <video
+              style={{
+                width: "100%",
+                height: "auto",
+                minHeight: "400px",
+                padding: "10px",
+                border: "none",
+                resize: "none",
+              }}
+              src={videoUrl}
+              controls
+              autoPlay
+              muted
+            />
+          )}
           <Card.Body style={{ maxHeight: "200px", overflow: "auto" }}>
             <Row className="align-items-center">
-              <Col xs={2}></Col>
+              <Col xs={2}>
+                <img
+                  src={picUrl}
+                  alt="pic"
+                  className="rounded-circle me-2"
+                  style={{ width: "50px" }}
+                />
+              </Col>
               <Col xs={6}>
                 <Card.Text style={{ color: "#B7C8FA" }}>
                   {description}
@@ -175,7 +235,7 @@ const MultimediaStory = ({ multimedia, postId, username_, description }) => {
                 </div>
               </Col>
             </Row>
-            <small className="text-muted">{"post.timestamp"}</small>
+            <small>{date.slice(0, 10)}</small>
           </Card.Body>
         </Card>
       </Col>

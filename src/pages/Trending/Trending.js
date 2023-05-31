@@ -57,7 +57,9 @@ const Trending = () => {
         {sortedStories.map((p) => {
           const user = userInfo.find((u) => u.userId === p.user);
           const username = user ? user.username : ""; // Get the username from userInfo
-
+          if (!user) {
+            return null;
+          }
           return p.type === "text" ? (
             <TextStory
               key={p._id}
@@ -66,6 +68,8 @@ const Trending = () => {
               text={p.text}
               font={p.font}
               postId={p._id}
+              date={p.date}
+              user={user}
               username_={username} // Pass the username as a prop
             />
           ) : (
@@ -73,6 +77,8 @@ const Trending = () => {
               key={p._id}
               multimedia={p.multimedia}
               description={p.description}
+              date={p.date}
+              user={user}
               username_={username} // Pass the username as a prop
               postId={p._id}
             />

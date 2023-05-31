@@ -1,11 +1,50 @@
 import React from "react";
 import AppLogo from "./1.PNG";
 import { Link } from "react-router-dom";
-// import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { setUser } from "../redux/StoryActions";
 const Header = () => {
-  // const userState = useSelector((state) => state.userReducer);
-  return (
+  const userState = useSelector((state) => state.userReducer);
+  let { isLoggedIn, picture } = userState.user;
+  const dispatch = useDispatch();
+
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    if (picture) {
+      const blob = new Blob([new Uint8Array(picture.data)], {
+        type: picture.contentType,
+      });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageUrl(reader.result);
+      };
+      reader.readAsDataURL(blob);
+    } else {
+      setImageUrl(AppLogo);
+    }
+  }, [picture]);
+
+  const logoutHandler = () => {
+    const id = null;
+    const username = null;
+    const email = null;
+    const authToken = null;
+    const picture = null;
+    const isLoggedIn = false;
+    dispatch(
+      setUser({
+        id,
+        username,
+        email,
+        authToken,
+        picture,
+        isLoggedIn,
+      })
+    );
+  };
+  return isLoggedIn ? (
     <nav
       className="navbar navbar-expand-lg"
       style={{
@@ -20,7 +59,7 @@ const Header = () => {
           style={{ color: "#FFF", fontWeight: "bold", fontSize: "24px" }}
         >
           <img
-            src={AppLogo}
+            src={imageUrl}
             alt="pic"
             className="rounded-circle me-2"
             style={{ width: "50px" }}
@@ -90,10 +129,33 @@ const Header = () => {
                 Story Management
               </Link>
             </li>
+            <li className="nav-item" style={{ color: "red" }}>
+              <Link
+                className="nav-link active"
+                to="/"
+                style={{ color: "#64FFDA" }}
+                onClick={logoutHandler}
+              >
+                Logout
+              </Link>
+            </li>
           </ul>
+          {/* <form className="d-flex">
+            <input
+              className="form-control me-2"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button className="btn btn-outline-light" type="submit">
+              Search
+            </button>
+          </form> */}
         </div>
       </div>
     </nav>
+  ) : (
+    ""
   );
 };
 

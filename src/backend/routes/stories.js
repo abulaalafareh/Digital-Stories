@@ -5,7 +5,6 @@ const router = express.Router();
 const { body } = require("express-validator");
 const multer = require("multer");
 var fs = require("fs");
-var path = require("path");
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -46,7 +45,7 @@ router.post(
         if (req.file && req.file.filename) {
           data = {
             data: fs.readFileSync(`uploads/${req.file.filename}`),
-            contentType: "image/png",
+            contentType: req.body.contentType,
           };
           // console.log("data", data);
         }
@@ -157,12 +156,27 @@ router.delete("/deletestory/:id", fetchUser, async (req, res) => {
     res.status(500).send("Internal server error");
   }
 });
-// Route 5 fetch all stories from database : login required
+
+// Route to fetch paginated stories from the database (login required)
 router.get("/fetchallstories", async (req, res) => {
   try {
-    const stories = await Stories.find();
+    const page = parseInt(req.query.page) || 1; // Get the requested page number from the query string
+    const pageSize = parseInt(req.query.pageSize) || 20; // Get the page size from the query string
 
-    res.json(stories);
+    const totalStories = await Stories.countDocuments(); // Count the total number of stories with the specified status
+    const totalPages = Math.ceil(totalStories / pageSize); // Calculate the total number of pages
+
+    const stories = await Stories.find()
+      .skip((page - 1) * pageSize) // Skip the appropriate number of documents based on the requested page
+      .limit(pageSize); // Limit the number of documents to fetch per page
+
+    res.json({
+      page,
+      pageSize,
+      totalPages,
+      totalStories,
+      stories,
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal server error");

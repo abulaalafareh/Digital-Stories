@@ -6,10 +6,6 @@ const storySchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  // title: {
-  //   type: String,
-  //   required: true,
-  // },
   description: {
     type: String,
   },
@@ -22,7 +18,7 @@ const storySchema = new Schema({
   },
   multimedia: {
     data: Buffer,
-    contentType: "String", // buffer stores data in binary so it can be image/video/audio etc
+    contentType: String, // buffer stores data in binary so it can be image/video/audio etc
   },
   text: {
     type: String,

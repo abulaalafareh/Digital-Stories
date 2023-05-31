@@ -7,22 +7,50 @@ import Leaderboard from "./pages/Leaderboard/Leaderboard";
 import Management from "./pages/StoryManagementPage/StoryManagementPage";
 import Trending from "./pages/Trending/Trending";
 import { ReactionProvider } from "./contextApi/ReactionContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { ToggleFormProvider } from "./contextApi/ToggleFormContext";
 function App() {
   return (
     <BrowserRouter>
       <Header />
-      <ReactionProvider>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/Home" element={<Home />} />
-          <Route path="/engagement" element={<Engagement />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/story-management" element={<Management />} />
-          <Route path="/trending" element={<Trending />} />
-          <Route path="/landing" element={<Landing />} />
-          <Route path="*" element={<div>404 not found</div>} />
-        </Routes>
-      </ReactionProvider>
+      <ToggleFormProvider>
+        <ReactionProvider>
+          <Routes>
+            <Route exact path="/" element={<Landing />} />
+            <Route
+              exact
+              path="/Home"
+              element={<ProtectedRoute element={Home} />}
+            />
+            <Route
+              exact
+              path="/engagement"
+              element={<ProtectedRoute element={Engagement} />}
+            />
+            <Route
+              exact
+              path="/leaderboard"
+              element={<ProtectedRoute element={Leaderboard} />}
+            />
+            <Route
+              exact
+              path="/story-management"
+              element={<ProtectedRoute element={Management} />}
+            />
+            <Route
+              exact
+              path="/trending"
+              element={<ProtectedRoute element={Trending} />}
+            />
+            <Route
+              exact
+              path="/landing"
+              element={<ProtectedRoute element={Landing} />}
+            />
+            <Route exact path="*" element={<div>404 not found</div>} />
+          </Routes>
+        </ReactionProvider>
+      </ToggleFormProvider>
     </BrowserRouter>
   );
 }

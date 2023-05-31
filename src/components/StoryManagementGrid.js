@@ -8,16 +8,29 @@ const StoryManagementGrid = ({ multimedia, postId, description }) => {
   const userState = useSelector((state) => state.userReducer);
   const [showImageForm, setShowImageForm] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [videoUrl, setVideoUrl] = useState("");
   useEffect(() => {
     if (multimedia) {
-      const blob = new Blob([new Uint8Array(multimedia.data.data)], {
-        type: multimedia.contentType,
-      });
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageUrl(reader.result);
-      };
-      reader.readAsDataURL(blob);
+      if (multimedia.contentType.startsWith("image/")) {
+        const blob = new Blob([new Uint8Array(multimedia.data.data)], {
+          type: multimedia.contentType,
+        });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImageUrl(reader.result);
+        };
+        reader.readAsDataURL(blob);
+      } else {
+        const blob = new Blob([new Uint8Array(multimedia.data.data)], {
+          type: multimedia.contentType,
+        });
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setVideoUrl(reader.result);
+        };
+        reader.readAsDataURL(blob);
+        console.log("videoUrl", videoUrl, multimedia.data);
+      }
     }
   }, [multimedia]);
   const handleMakeChanges = () => {
@@ -63,11 +76,27 @@ const StoryManagementGrid = ({ multimedia, postId, description }) => {
           postId={postId}
         />
       )}
-      <img
-        src={imageUrl}
-        alt=""
-        style={{ width: "100%", minHeight: "150px" }}
-      />
+      {multimedia.contentType.startsWith("image/") ? (
+        <img
+          src={imageUrl}
+          alt=""
+          style={{
+            width: "100%",
+            minHeight: "150px",
+            backgroundColor: "#003152",
+          }}
+        />
+      ) : (
+        <video
+          src={videoUrl}
+          alt=""
+          style={{
+            width: "100%",
+            minHeight: "150px",
+            backgroundColor: "#003152",
+          }}
+        />
+      )}
       <div>
         <Dropdown>
           <Dropdown.Toggle variant="light" id="dropdown-basic">

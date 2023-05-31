@@ -5,6 +5,7 @@ const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 var fetchUser = require("../middleware/fetchUser");
+var fs = require("fs");
 const JWT_SECRET = "abc1234$$";
 // Create a User using : POST "/auth/" dosent require authentication
 
@@ -15,7 +16,7 @@ const storage = multer.diskStorage({
     cb(null, "uploadsDP/"); // Set the destination folder for uploaded files
   },
   filename: function (req, file, cb) {
-    cb(null, file.originalname); // Use the original file name for the uploaded file
+    cb(null, file.fieldname + "-" + Date.now());
   },
 });
 
@@ -56,7 +57,10 @@ router.post(
       const salt = await bcrypt.genSalt(10);
 
       let secPass = await bcrypt.hash(req.body.password, salt);
-
+      let imageData = null;
+      if (req.file) {
+        imageData = fs.readFileSync(`uploadsDp/${req.file.filename}`);
+      }
       // create a new user with image field set to the path of the uploaded file (if any)
       user = await User.create({
         name: req.body.name,
@@ -64,7 +68,7 @@ router.post(
         username: req.body.username,
         password: secPass,
         image: {
-          data: req.file ? req.file.filename : null,
+          data: imageData,
           contentType: "image/png",
           // set image field to path of uploaded file if it exists, otherwise set it to null
         },

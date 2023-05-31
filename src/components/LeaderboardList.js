@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Row } from "react-bootstrap";
 import axios from "axios";
-import EngagementUserStoryList from "./EngagementUserStoryList";
 import LeaderboardRankingList from "./LeaderboardRankingList";
 const LeaderboaradList = ({ storyList, reactedStoryList }) => {
-  const [currentList, setCurrentList] = useState(true);
-
   const [comments, setComments] = useState({});
   const [upvotes, setUpvotes] = useState({});
   const [downvotes, setDownvotes] = useState({});

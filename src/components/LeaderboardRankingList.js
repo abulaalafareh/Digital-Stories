@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import HeadingCardLeaderboard from "./HeadingCardLeaderboard";
 import { Card } from "react-bootstrap";
 import { ReactionContext } from "../contextApi/ReactionContext";
-import { useContext } from "react";
-const userPicture = require("./1.PNG");
+import AppLogo from "./1.PNG";
+
 const LeaderboardRankingList = ({ reactedStoryList }) => {
   const { stories_, upvotes_, userInfo } = useContext(ReactionContext);
+  const [userImages, setUserImages] = useState({});
 
   // Count the number of stories for each user
   const userStories = stories_.reduce((storiesMap, story) => {
@@ -40,26 +41,56 @@ const LeaderboardRankingList = ({ reactedStoryList }) => {
     (a, b) => userStories[b].storyCount - userStories[a].storyCount
   );
 
-  const getUsernameById = (userId) => {
+  useEffect(() => {
+    const loadUserImages = async () => {
+      const imagePromises = sortedUserIds.map(async (userId) => {
+        const userData = getUserDataById(userId);
+        if (userData && userData.image && userData.image.data) {
+          const blob = new Blob([new Uint8Array(userData.image.data.data)], {
+            type: userData.image.contentType,
+          });
+          const imageUrl = URL.createObjectURL(blob);
+          return { userId, imageUrl };
+        } else {
+          return { userId, imageUrl: AppLogo };
+        }
+      });
+      const userImagesData = await Promise.all(imagePromises);
+      const userImagesMap = userImagesData.reduce(
+        (map, { userId, imageUrl }) => {
+          map[userId] = imageUrl;
+          return map;
+        },
+        {}
+      );
+      setUserImages(userImagesMap);
+    };
+
+    loadUserImages();
+  }, []);
+
+  const getUserDataById = (userId) => {
     const user = userInfo.find((user) => user.userId === userId);
-    if (user) {
-      return user.username;
-    }
-    return "";
+    return user ? { username: user.username, image: user.image } : null;
   };
 
-  // Retrieve the user IDs with the most stories along with their story counts, story IDs, username and total upvotes
-  const usersWithMostStories = sortedUserIds.map((userId) => {
-    const username = getUsernameById(userId);
-
-    return {
-      userId,
-      username,
-      storyCount: userStories[userId].storyCount,
-      storyIds: userStories[userId].storyIds,
-      totalUpvotes: userStories[userId].totalUpvotes,
-    };
-  });
+  const filteredUsersWithMostStories = sortedUserIds
+    .map((userId) => {
+      const userData = getUserDataById(userId);
+      if (!userData) {
+        return null;
+      }
+      const imageUrl = userImages[userId] || AppLogo;
+      return {
+        userId,
+        username: userData.username,
+        image: imageUrl,
+        storyCount: userStories[userId].storyCount,
+        storyIds: userStories[userId].storyIds,
+        totalUpvotes: userStories[userId].totalUpvotes,
+      };
+    })
+    .filter((user) => user !== null);
 
   return (
     <Container
@@ -91,7 +122,7 @@ const LeaderboardRankingList = ({ reactedStoryList }) => {
             }}
           >
             <ul>
-              {usersWithMostStories.map((user) => (
+              {filteredUsersWithMostStories.map((user) => (
                 <Card
                   key={user.userId}
                   className="my-4 rounded-lg"
@@ -108,7 +139,7 @@ const LeaderboardRankingList = ({ reactedStoryList }) => {
                     <div className="flex-grow-1">
                       <div className="d-flex align-items-center">
                         <img
-                          src={userPicture}
+                          src={user.image}
                           alt=""
                           style={{
                             width: "40px",

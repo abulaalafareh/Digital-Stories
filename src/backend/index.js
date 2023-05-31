@@ -6,7 +6,7 @@ connectToMongo();
 
 const app = express();
 const port = 5000;
-
+app.use("../uploads", express.static("uploads"));
 app.use(express.json());
 app.use(
   cors({

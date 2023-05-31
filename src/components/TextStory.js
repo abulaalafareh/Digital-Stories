@@ -4,6 +4,7 @@ import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { ReactionContext } from "../contextApi/ReactionContext";
+import AppLogo from "./1.PNG";
 import { useContext } from "react";
 const TextStory = ({
   color,
@@ -12,11 +13,13 @@ const TextStory = ({
   font,
   postId,
   username_,
+  date,
+  user,
 }) => {
   const { updateComments, updateUpvotes, updateDownvotes } =
     useContext(ReactionContext);
   const userState = useSelector((state) => state.userReducer);
-
+  const [imageUrl, setImageUrl] = useState("");
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [upvotes, setUpvotes] = useState(0);
@@ -38,6 +41,22 @@ const TextStory = ({
 
     fetchComments();
   }, [postId]);
+
+  useEffect(() => {
+    if (user && user.image && user.image.data) {
+      console.log("user.image.data", user.image.data);
+      const blob = new Blob([new Uint8Array(user.image.data.data)], {
+        type: user.image.contentType,
+      });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImageUrl(reader.result);
+      };
+      reader.readAsDataURL(blob);
+    } else {
+      setImageUrl(AppLogo);
+    }
+  }, []);
 
   // Effect to fetch upvotes and downvotes
   useEffect(() => {
@@ -139,7 +158,14 @@ const TextStory = ({
           />
           <Card.Body style={{ maxHeight: "200px", overflow: "auto" }}>
             <Row className="align-items-center">
-              <Col xs={2}></Col>
+              <Col xs={2}>
+                <img
+                  src={imageUrl}
+                  alt="pic"
+                  className="rounded-circle me-2"
+                  style={{ width: "50px" }}
+                />
+              </Col>
               <Col xs={6}>
                 <Card.Title>{username_}</Card.Title>
               </Col>
@@ -162,7 +188,7 @@ const TextStory = ({
                 </div>
               </Col>
             </Row>
-            <small className="text-muted">{"post.timestamp"}</small>
+            <small>{date.slice(0, 10)}</small>
           </Card.Body>
         </Card>
       </Col>
@@ -192,7 +218,7 @@ const TextStory = ({
                 >
                   <span style={{ color: "#2F4858" }}>{comment.username}</span>
                   <hr style={{ color: "#ffffff" }}></hr>
-                  <span style={{ color: "#2F4858" }}>{comment.body}</span>
+                  <div style={{ color: "#2F4858" }}>{comment.body}</div>
                 </div>
               ))}
             </Card.Text>

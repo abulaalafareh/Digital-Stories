@@ -15,14 +15,20 @@ const VideoStoryForm = ({
   const formData = new FormData();
   const [description, setDescription] = useState(newDescription);
   const [file, setFile] = useState(null);
+  const [status, setStatus] = useState("private");
+  const [errorMessage, setErrorMessage] = useState(""); // Add error message state
+
   formData.append("description", description);
   formData.append("image", file);
-  // formData.append("contentType", "image/jpg");
-  formData.append("type", "image");
+  formData.append("contentType", "video/mp4");
+  formData.append("type", "video");
+  formData.append("status", status === "public" ? true : false);
   const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
   };
-
+  const handleVisibilityChange = (event) => {
+    setStatus(event.target.value);
+  };
   const handleSubmitClick = async () => {
     let { Authentication } = userState.user;
     if (update) {
@@ -38,6 +44,11 @@ const VideoStoryForm = ({
       handleSubmit();
       handleClose();
     } else {
+      if (!file || file.type.indexOf("video") === -1) {
+        setErrorMessage("Please select a video file.");
+        return;
+      }
+
       const response = await axios.post(
         "http://localhost:5000/stories/addstory",
         formData,
@@ -72,9 +83,23 @@ const VideoStoryForm = ({
             <Form.Label>Video</Form.Label>
             <Form.Control
               type="file"
+              accept="video/*" // Specify the accepted file types as video
               onChange={(event) => setFile(event.target.files[0])}
             />
           </Form.Group>
+          <Form.Group>
+            Who can see
+            <Form.Control
+              as="select"
+              value={status}
+              name="status"
+              onChange={handleVisibilityChange}
+            >
+              <option value="private">Private</option>
+              <option value="public">Public</option>
+            </Form.Control>
+          </Form.Group>
+          {errorMessage && <div className="text-danger">{errorMessage}</div>}
         </Form>
       </Modal.Body>
       <Modal.Footer>
