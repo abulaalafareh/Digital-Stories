@@ -13,6 +13,8 @@ const RegisterForm = () => {
   const { updateToggleForm } = useContext(ToggleFormContext);
   const dispatch = useDispatch();
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const navigate = useNavigate();
 
   const initialValues = {
@@ -27,7 +29,9 @@ const RegisterForm = () => {
     name: Yup.string().required("Name is required"),
     username: Yup.string().required("Username is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string().required("Password is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(5, "Password must be at least 5 characters long"),
     // image: Yup.mixed().required("Profile image is required"),
   });
 
@@ -45,6 +49,8 @@ const RegisterForm = () => {
       // handle successful registration
       if (response) {
         // Retrieve necessary user data from the response
+        setSuccessMessage("Registration successful!");
+        setErrorMessage(null);
         const { id, username, Authentication, email, picture, isLoggedIn } =
           response.data.user;
         dispatch(
@@ -62,12 +68,19 @@ const RegisterForm = () => {
     } catch (error) {
       console.log("error:", error.response.data.errors);
       setError(error.response.data.errors);
+      setErrorMessage("User already exists.");
     }
   };
 
   return (
     <div>
       <h1 style={{ color: "#2F4858" }}>Register</h1>
+      {successMessage && (
+        <div className="alert alert-success">{successMessage}</div>
+      )}
+
+      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -121,7 +134,12 @@ const RegisterForm = () => {
 
             <Form.Group controlId="formBasicImage">
               <Form.Label>Profile Image</Form.Label>
-              <Field type="file" name="image" className="form-control" />
+              <Field
+                type="file"
+                name="image"
+                accept="image/*"
+                className="form-control"
+              />
             </Form.Group>
 
             {error && (

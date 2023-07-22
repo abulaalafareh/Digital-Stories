@@ -9,6 +9,8 @@ const StoryManagementGrid = ({ multimedia, postId, description }) => {
   const [showImageForm, setShowImageForm] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
+  const [mediaStatus, setMediaStatus] = useState("visible");
+
   useEffect(() => {
     if (multimedia) {
       if (multimedia.contentType.startsWith("image/")) {
@@ -48,6 +50,7 @@ const StoryManagementGrid = ({ multimedia, postId, description }) => {
         },
       }
     );
+    setMediaStatus("deleted");
 
     // Do something when the "Delete" dropdown item is clicked
   };
@@ -76,27 +79,28 @@ const StoryManagementGrid = ({ multimedia, postId, description }) => {
           postId={postId}
         />
       )}
-      {multimedia.contentType.startsWith("image/") ? (
-        <img
-          src={imageUrl}
-          alt=""
-          style={{
-            width: "100%",
-            minHeight: "150px",
-            backgroundColor: "#003152",
-          }}
-        />
-      ) : (
-        <video
-          src={videoUrl}
-          alt=""
-          style={{
-            width: "100%",
-            minHeight: "150px",
-            backgroundColor: "#003152",
-          }}
-        />
-      )}
+      {mediaStatus === "visible" &&
+        (multimedia.contentType.startsWith("image/") ? (
+          <img
+            src={imageUrl}
+            alt=""
+            style={{
+              width: "100%",
+              minHeight: "150px",
+              backgroundColor: "#003152",
+            }}
+          />
+        ) : (
+          <video
+            src={videoUrl}
+            alt=""
+            style={{
+              width: "100%",
+              minHeight: "150px",
+              backgroundColor: "#003152",
+            }}
+          />
+        ))}
       <div>
         <Dropdown>
           <Dropdown.Toggle variant="light" id="dropdown-basic">

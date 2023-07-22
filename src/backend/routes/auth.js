@@ -28,8 +28,6 @@ router.post(
   [
     body("email", "Enter a valid email").isEmail(),
 
-    body("name", "Minimum length of name should be 3").isLength({ min: 3 }),
-
     body("password", "Minimum password length should be 5").isLength({
       min: 5,
     }),

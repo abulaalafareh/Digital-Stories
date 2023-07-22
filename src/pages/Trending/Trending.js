@@ -78,6 +78,7 @@ const Trending = () => {
               multimedia={p.multimedia}
               description={p.description}
               date={p.date}
+              type={p.type}
               user={user}
               username_={username} // Pass the username as a prop
               postId={p._id}

@@ -110,6 +110,7 @@ const StoryManagementPage = () => {
         </div>
         <br></br>
         <br></br>
+        <hr></hr>
         <br></br>
         {/* <h1 className="text-center my-5">Create Story</h1> */}
         <Row className="justify-content-around">

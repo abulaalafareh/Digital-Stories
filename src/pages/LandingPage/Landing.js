@@ -35,12 +35,11 @@ const Landing = () => {
             height: "650px",
           }}
         >
-          <h1 style={{ color: "#2F4858" }}>Welcome to my website</h1>
+          <h1 style={{ color: "#2F4858" }}>Welcome to Digital Stories</h1>
           <p style={{ color: "#2F4858" }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
+            Stories have been going around since the start of time so what is
+            stopping you from sharing yours? Share your experiences, Share your
+            thoughts, Share your achievements share what can be shared.
           </p>
         </div>
         <div

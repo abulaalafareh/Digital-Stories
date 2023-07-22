@@ -53,6 +53,7 @@ const LoginForm = () => {
           username = response.data.username;
           Authentication = auth;
           picture = response.data.image ? response.data.image.data : null;
+          console.log(picture, response.data);
           isLoggedIn = true;
           dispatch(
             setUser({
