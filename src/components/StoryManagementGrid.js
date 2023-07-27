@@ -31,7 +31,7 @@ const StoryManagementGrid = ({ multimedia, postId, description }) => {
           setVideoUrl(reader.result);
         };
         reader.readAsDataURL(blob);
-        console.log("videoUrl", videoUrl, multimedia.data);
+        // console.log("videoUrl", videoUrl, multimedia.data);
       }
     }
   }, [multimedia]);
@@ -79,42 +79,45 @@ const StoryManagementGrid = ({ multimedia, postId, description }) => {
           postId={postId}
         />
       )}
-      {mediaStatus === "visible" &&
-        (multimedia.contentType.startsWith("image/") ? (
-          <img
-            src={imageUrl}
-            alt=""
-            style={{
-              width: "100%",
-              minHeight: "150px",
-              backgroundColor: "#003152",
-            }}
-          />
-        ) : (
-          <video
-            src={videoUrl}
-            alt=""
-            style={{
-              width: "100%",
-              minHeight: "150px",
-              backgroundColor: "#003152",
-            }}
-          />
-        ))}
-      <div>
-        <Dropdown>
-          <Dropdown.Toggle variant="light" id="dropdown-basic">
-            <i className="fas fa-ellipsis-h"></i>
-          </Dropdown.Toggle>
+      {mediaStatus === "visible" && (
+        <>
+          {multimedia.contentType.startsWith("image/") ? (
+            <img
+              src={imageUrl}
+              alt=""
+              style={{
+                width: "100%",
+                minHeight: "150px",
+                backgroundColor: "#003152",
+              }}
+            />
+          ) : (
+            <video
+              src={videoUrl}
+              alt=""
+              style={{
+                width: "100%",
+                minHeight: "150px",
+                backgroundColor: "#003152",
+              }}
+            />
+          )}
+          <div>
+            <Dropdown>
+              <Dropdown.Toggle variant="light" id="dropdown-basic">
+                <i className="fas fa-ellipsis-h"></i>
+              </Dropdown.Toggle>
 
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={handleMakeChanges}>
-              Make Changes
-            </Dropdown.Item>
-            <Dropdown.Item onClick={handleDelete}>Delete</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={handleMakeChanges}>
+                  Make Changes
+                </Dropdown.Item>
+                <Dropdown.Item onClick={handleDelete}>Delete</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+        </>
+      )}
     </div>
   );
 };

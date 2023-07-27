@@ -53,7 +53,7 @@ const LoginForm = () => {
           username = response.data.username;
           Authentication = auth;
           picture = response.data.image ? response.data.image.data : null;
-          console.log(picture, response.data);
+          // console.log(picture, response.data);
           isLoggedIn = true;
           dispatch(
             setUser({
@@ -72,7 +72,7 @@ const LoginForm = () => {
         }
       }
     } catch (error) {
-      console.log("error:", error.response.data.errors);
+      // console.log("error:", error.response.data.errors);
       setError(error.response.data.errors);
     }
   };

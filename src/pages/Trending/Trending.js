@@ -1,6 +1,4 @@
 import React, { useEffect, useContext, useState } from "react";
-import axios from "axios";
-import { useSelector } from "react-redux";
 import { ReactionContext } from "../../contextApi/ReactionContext";
 import TextStory from "../../components/TextStory";
 import MultimediaStory from "../../components/MultimediaStory";
@@ -9,8 +7,6 @@ const Trending = () => {
   const [sortedStories, setSortedStories] = useState([]);
   const { comments_, upvotes_, userInfo, stories_ } =
     useContext(ReactionContext);
-  const userState = useSelector((state) => state.userReducer);
-  const { Authentication } = userState.user;
 
   useEffect(() => {
     const fetchPosts = async () => {

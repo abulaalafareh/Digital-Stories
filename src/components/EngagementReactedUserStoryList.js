@@ -5,14 +5,21 @@ import { Card } from "react-bootstrap";
 import { ReactionContext } from "../contextApi/ReactionContext";
 import { useContext } from "react";
 
-const EngagementReactedUserStoryList = ({ reactedStoryList }) => {
+const EngagementReactedUserStoryList = ({
+  reactedStoryList,
+  upvotes,
+  downvotes,
+  comments,
+}) => {
   const { stories_ } = useContext(ReactionContext);
+  // console.log("stories", stories_);
   const reactedStoryData = reactedStoryList.map((reactedStory) => {
     const { text, description } = stories_.find(
-      (story) => story._id === reactedStory.storyId
+      (story) => story._id === reactedStory
     );
-    return { ...reactedStory, text, description };
+    return { reactedStory, text, description };
   });
+  // console.log(reactedStoryData);
   return (
     <Container
       className="d-flex justify-content-center align-items-center vh-100"
@@ -72,7 +79,7 @@ const EngagementReactedUserStoryList = ({ reactedStoryList }) => {
                         style={{ marginRight: "85px" }}
                       >
                         <Card.Text className="m-0">
-                          {reactedStory.upvotesCount}
+                          {upvotes[reactedStory.reactedStory]}
                         </Card.Text>
                       </div>
                       <div
@@ -80,7 +87,7 @@ const EngagementReactedUserStoryList = ({ reactedStoryList }) => {
                         style={{ marginRight: "85px" }}
                       >
                         <Card.Text className="m-0">
-                          {reactedStory.downvotesCount}
+                          {downvotes[reactedStory.reactedStory]}
                         </Card.Text>
                       </div>
                       <div
@@ -88,7 +95,7 @@ const EngagementReactedUserStoryList = ({ reactedStoryList }) => {
                         style={{ marginRight: "85px" }}
                       >
                         <Card.Text className="m-0">
-                          {reactedStory.commentsCount}
+                          {comments[reactedStory.reactedStory]}
                         </Card.Text>
                       </div>
                     </Card.Body>

@@ -15,6 +15,7 @@ const RegisterForm = () => {
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [file, setFile] = useState(null);
   const navigate = useNavigate();
 
   const initialValues = {
@@ -37,9 +38,13 @@ const RegisterForm = () => {
 
   const handleFormSubmit = async (values) => {
     try {
-      const formDataWithImage = new FormData();
+      let formDataWithImage = new FormData();
       Object.entries(values).forEach(([key, value]) => {
-        formDataWithImage.append(key, value);
+        if (key === "image") {
+          formDataWithImage.append(key, file);
+        } else {
+          formDataWithImage.append(key, value);
+        }
       });
       const response = await axios.post(
         "http://localhost:5000/auth/register",
@@ -66,7 +71,7 @@ const RegisterForm = () => {
         navigate("/Home");
       }
     } catch (error) {
-      console.log("error:", error.response.data.errors);
+      // console.log("error:", error.response.data.errors);
       setError(error.response.data.errors);
       setErrorMessage("User already exists.");
     }
@@ -131,14 +136,14 @@ const RegisterForm = () => {
                 style={{ color: "red" }}
               />
             </Form.Group>
-
+            <br></br>
             <Form.Group controlId="formBasicImage">
               <Form.Label>Profile Image</Form.Label>
               <Field
                 type="file"
                 name="image"
                 accept="image/*"
-                className="form-control"
+                onChange={(event) => setFile(event.target.files[0])}
               />
             </Form.Group>
 

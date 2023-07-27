@@ -4,10 +4,13 @@ import HeadingCardLeaderboard from "./HeadingCardLeaderboard";
 import { Card } from "react-bootstrap";
 import { ReactionContext } from "../contextApi/ReactionContext";
 import AppLogo from "./1.PNG";
+import axios from "axios";
 
 const LeaderboardRankingList = ({ reactedStoryList }) => {
-  const { stories_, upvotes_, userInfo } = useContext(ReactionContext);
+  const { stories_, userInfo } = useContext(ReactionContext);
   const [userImages, setUserImages] = useState({});
+  const [filteredUsersWithMostStories, setFilteredUsersWithMostStories] =
+    useState([]);
 
   // Count the number of stories for each user
   const userStories = stories_.reduce((storiesMap, story) => {
@@ -23,24 +26,9 @@ const LeaderboardRankingList = ({ reactedStoryList }) => {
     storiesMap[user].storyIds.push(_id);
     return storiesMap;
   }, {});
-
-  // Calculate the total number of upvotes for each user's stories
-  Object.keys(userStories).forEach((userId) => {
-    const userStoryIds = userStories[userId].storyIds;
-    const totalUpvotes = userStoryIds.reduce((total, storyId) => {
-      const upvote = upvotes_.find(
-        (upvote) => upvote.story === storyId && upvote.upvote
-      );
-      return total + (upvote ? 1 : 0);
-    }, 0);
-    userStories[userId].totalUpvotes = totalUpvotes;
-  });
-
-  // Sort the user IDs based on the story counts in descending order
   const sortedUserIds = Object.keys(userStories).sort(
     (a, b) => userStories[b].storyCount - userStories[a].storyCount
   );
-
   useEffect(() => {
     const loadUserImages = async () => {
       const imagePromises = sortedUserIds.map(async (userId) => {
@@ -50,6 +38,7 @@ const LeaderboardRankingList = ({ reactedStoryList }) => {
             type: userData.image.contentType,
           });
           const imageUrl = URL.createObjectURL(blob);
+          console.log("image", imageUrl);
           return { userId, imageUrl };
         } else {
           return { userId, imageUrl: AppLogo };
@@ -74,24 +63,67 @@ const LeaderboardRankingList = ({ reactedStoryList }) => {
     return user ? { username: user.username, image: user.image } : null;
   };
 
-  const filteredUsersWithMostStories = sortedUserIds
-    .map((userId) => {
-      const userData = getUserDataById(userId);
-      if (!userData) {
-        return null;
-      }
-      const imageUrl = userImages[userId] || AppLogo;
-      return {
-        userId,
-        username: userData.username,
-        image: imageUrl,
-        storyCount: userStories[userId].storyCount,
-        storyIds: userStories[userId].storyIds,
-        totalUpvotes: userStories[userId].totalUpvotes,
-      };
-    })
-    .filter((user) => user !== null);
+  // Calculate the total number of upvotes for each user's stories
+  useEffect(() => {
+    const userIds = Object.keys(userStories);
 
+    // Define a function to fetch upvotes for a single story
+    const getUpvotesForStory = async (storyId) => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/vote/upvotes/${storyId}`
+        );
+        return response.data.length;
+      } catch (error) {
+        console.error(error); // Handle any potential errors
+        return 0; // If there's an error, return 0 upvotes for the story
+      }
+    };
+
+    // Loop through user stories
+    Promise.all(
+      userIds.map(async (userId) => {
+        const userStoryIds = userStories[userId].storyIds;
+
+        // Fetch upvotes for all stories concurrently using Promise.all
+        const upvotePromises = userStoryIds.map((storyId) =>
+          getUpvotesForStory(storyId)
+        );
+        const upvotes = await Promise.all(upvotePromises);
+
+        // Calculate the total upvotes for the user's stories
+        const totalUpvotes = upvotes.reduce(
+          (total, upvote) => total + upvote,
+          0
+        );
+        // console.log("Total upvotes for user", userId, ":", totalUpvotes);
+
+        // Update the userStories object with the totalUpvotes
+        userStories[userId].totalUpvotes = totalUpvotes;
+      })
+    ).then(() => {
+      const filteredUsersWithMostStories = sortedUserIds
+        .map((userId) => {
+          const userData = getUserDataById(userId);
+          if (!userData) {
+            return null;
+          }
+          const imageUrl = userImages[userId] || AppLogo;
+          return {
+            userId,
+            username: userData.username,
+            image: imageUrl,
+            storyCount: userStories[userId].storyCount,
+            storyIds: userStories[userId].storyIds,
+            totalUpvotes: userStories[userId].totalUpvotes,
+          };
+        })
+        .filter((user) => user !== null);
+
+      setFilteredUsersWithMostStories(filteredUsersWithMostStories);
+      // console.log("filteredUsersWithMostStories", filteredUsersWithMostStories);
+    });
+  }, [sortedUserIds]);
   return (
     <Container
       className="d-flex justify-content-center align-items-center vh-100"

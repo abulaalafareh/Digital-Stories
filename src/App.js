@@ -47,7 +47,24 @@ function App() {
               path="/landing"
               element={<ProtectedRoute element={Landing} />}
             />
-            <Route exact path="*" element={<div>404 not found</div>} />
+            <Route
+              exact
+              path="*"
+              element={
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100vh",
+                  }}
+                >
+                  <div>
+                    <h1>404 NOT FOUND</h1>
+                  </div>
+                </div>
+              }
+            />
           </Routes>
         </ReactionProvider>
       </ToggleFormProvider>

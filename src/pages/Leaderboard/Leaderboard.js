@@ -1,5 +1,5 @@
 import React from "react";
-import LeaderboardList from "../../components/LeaderboardList";
+import LeaderboardRankingList from "../../components/LeaderboardRankingList";
 import { useEffect } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -65,7 +65,7 @@ const Leaderboard = () => {
   }));
   return (
     <div style={{ backgroundColor: "#134074" }}>
-      <LeaderboardList
+      <LeaderboardRankingList
         storyList={postList}
         reactedStoryList={storiesWithReactions}
       />

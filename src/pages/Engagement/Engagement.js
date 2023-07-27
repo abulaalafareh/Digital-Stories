@@ -39,23 +39,7 @@ const Engagement = () => {
     userReactedStories.map((reaction) => reaction.story)
   );
   const uniqueStoryIds = [...storyIds];
-
-  const storiesWithReactions = uniqueStoryIds.map((storyId) => {
-    const commentsCount = filteredComments.reduce(
-      (count, comment) => (comment.story === storyId ? count + 1 : count),
-      0
-    );
-    const upvotesCount = filteredUpvotes.reduce(
-      (count, upvote) => (upvote.story === storyId ? count + 1 : count),
-      0
-    );
-    const downvotesCount = filteredDownvotes.reduce(
-      (count, downvote) => (downvote.story === storyId ? count + 1 : count),
-      0
-    );
-
-    return { storyId, commentsCount, upvotesCount, downvotesCount };
-  });
+  // console.log(uniqueStoryIds);
 
   const postList = posts.map(({ _id, text, description }) => ({
     _id,
@@ -64,9 +48,13 @@ const Engagement = () => {
   }));
   return (
     <div style={{ backgroundColor: "#134074" }}>
-      <List storyList={postList} reactedStoryList={storiesWithReactions} />
+      <List storyList={postList} reactedStoryList={uniqueStoryIds} />
     </div>
   );
 };
 
 export default Engagement;
+
+// engagement --> List
+// List --> EngagementUserStoryList
+// List --> EngagementReactedUserStoryList

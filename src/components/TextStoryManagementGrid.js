@@ -14,6 +14,7 @@ const TextStoryManagementGrid = ({
   const userState = useSelector((state) => state.userReducer);
 
   const [showTextForm, setShowTextForm] = useState(false);
+  const [mediaStatus, setMediaStatus] = useState("visible");
 
   const handleMakeChanges = () => {
     setShowTextForm(true);
@@ -30,6 +31,7 @@ const TextStoryManagementGrid = ({
         },
       }
     );
+    setMediaStatus("deleted");
 
     // Do something when the "Delete" dropdown item is clicked
   };
@@ -67,36 +69,40 @@ const TextStoryManagementGrid = ({
           update={"update"}
         />
       )}
-      <textarea
-        style={{
-          width: "100%",
-          height: "auto",
-          minHeight: "150px", // Set a minimum height to prevent it from becoming too small
-          backgroundColor: background_color, // Background color
-          color: color, // Text color
-          fontFamily: font, // Text font
-          padding: "10px", // Add some padding for readability
-          border: "none", // Remove the border
-          textAlign: "center", // Center the text
-          resize: "none", // Prevent resizing the textarea
-        }}
-        value={text} // Use value instead of children to set the text
-        readOnly // Set readOnly to prevent the user from editing the text
-      />
-      <div>
-        <Dropdown>
-          <Dropdown.Toggle variant="light" id="dropdown-basic">
-            <i className="fas fa-ellipsis-h"></i>
-          </Dropdown.Toggle>
+      {mediaStatus === "visible" && (
+        <>
+          <textarea
+            style={{
+              width: "100%",
+              height: "auto",
+              minHeight: "150px", // Set a minimum height to prevent it from becoming too small
+              backgroundColor: background_color, // Background color
+              color: color, // Text color
+              fontFamily: font, // Text font
+              padding: "10px", // Add some padding for readability
+              border: "none", // Remove the border
+              textAlign: "center", // Center the text
+              resize: "none", // Prevent resizing the textarea
+            }}
+            value={text} // Use value instead of children to set the text
+            readOnly // Set readOnly to prevent the user from editing the text
+          />
+          <div>
+            <Dropdown>
+              <Dropdown.Toggle variant="light" id="dropdown-basic">
+                <i className="fas fa-ellipsis-h"></i>
+              </Dropdown.Toggle>
 
-          <Dropdown.Menu>
-            <Dropdown.Item onClick={handleMakeChanges}>
-              Make Changes
-            </Dropdown.Item>
-            <Dropdown.Item onClick={handleDelete}>Delete</Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-      </div>
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={handleMakeChanges}>
+                  Make Changes
+                </Dropdown.Item>
+                <Dropdown.Item onClick={handleDelete}>Delete</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
+        </>
+      )}
     </div>
   );
 };

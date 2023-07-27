@@ -44,7 +44,7 @@ const TextStory = ({
 
   useEffect(() => {
     if (user && user.image && user.image.data) {
-      console.log("user.image.data", user.image.data);
+      // console.log("user.image.data", user.image.data);
       const blob = new Blob([new Uint8Array(user.image.data.data)], {
         type: user.image.contentType,
       });
@@ -163,7 +163,12 @@ const TextStory = ({
                   src={imageUrl}
                   alt="pic"
                   className="rounded-circle me-2"
-                  style={{ width: "50px" }}
+                  style={{
+                    width: "50px",
+                    height: "50px",
+                    borderRadius: "50%",
+                    marginRight: "10px",
+                  }}
                 />
               </Col>
               <Col xs={6}>

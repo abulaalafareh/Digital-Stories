@@ -48,7 +48,8 @@ const StoryForm = ({
     setStatus(event.target.value);
   };
 
-  const handleSubmitClick = async () => {
+  const handleSubmitClick = async (event) => {
+    event.preventDefault();
     let { Authentication } = userState.user;
     if (update) {
       const response = await axios.put(
