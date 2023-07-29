@@ -1,70 +1,91 @@
-# Getting Started with Create React App
+# Digital Stories (Capstone Project)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a social media web application using MERN stack.
+A user can post his/her stories and interact with the stories of other users.
+A story can be kept public or private.
 
-## Available Scripts
+## Functionalities
 
-In the project directory, you can run:
+1. Login/Register
+2. Home : View and interact with stories
+3. Leaderboard : higher the number of stories higher a user will be on the leaderboard. 
+4. Engagement : View number of upvotes, downvotes and comments on your stories. 
+5. Engagement : View number of upvotes, downvotes and comments on stories you have reacted to. 
+6. Trending : Same as home page only difference is higher the number of interaction on a story more on top will it be. 
+7. Story Management : Create/Update Text Stories with changeable background color, text color, font and option to keep it public or private. 
+8. Story Management : Create/Update Image/Video Stories with description and option to keep it public or private. 
+9. Story Management : View your Stories 
+10. Story Management : Delete Stories 
+11. Logout
+12. 404 Not Found: Accessing Url that does not exist
 
-### `npm start`
+## Technologies
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. MERN Stack
+2. Bootstrap
+3. Redux
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
 
-### `npm test`
+### Login
+![Login](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/2e372b75-c7df-4046-b645-4fd2774f3c1d)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+### Register-Form Error
+![Register (Form Error)](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/c078b3cf-2d44-4909-afc9-b354a3cac615)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Register-Registeration Error
+![Register (error)](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/f59415ff-d573-4287-bc13-fb930fa6d77d)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-### `npm run eject`
+### Register-Success
+![Register (success)](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/8e95d67f-1c0a-404f-9a5a-110fe07371b2)
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Home Page
+![Home (Header)](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/b2322309-301d-452a-b1ab-be7a35eb5ad6)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Story
+![Home (Story)](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/7d969681-2d06-4c1e-996b-c39958b9f576)
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Leaderboard
+![Leaderboard](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/167d7b0d-b102-48f6-951f-e493c43473aa)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+### Engagement-User Stories
+![Engagement (Your Stories)](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/8cad3524-16b2-4207-9e78-d61660f2a036)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
+### Engagement-Stories Current user has interacted with
+![Engagement (Reacted Stories)](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/d8de2823-12b6-4912-98f4-5f2be3d72a77)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
+### Trending
+![Trending](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/7314734b-582a-4f39-b50f-320060d618c6)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+### Story Management
+![Story Management](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/fd211bde-5c9a-4002-9f3b-6d2f3576e4c9)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
+### Story Management-Text Story
+![Story Management (Text Story)](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/c6b8ed36-ca1b-4788-87ca-37e9640fb795)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+### Story Management-Image/Video Story
+![Story Management (Image Video Story)](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/515d5c92-70d4-4c9c-84f6-935de5cebddc)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+### Story Management-Story Options
+![Story Management (Story Options)](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/30eaf2f0-12b6-4b17-98dd-99a84aa119f4)
+
+
+### Story Management
+![Story Management 2](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/ce558489-086d-4847-9982-a74eec68680f)
+
+
+### 404 Not Found
+![404 Not Found](https://github.com/abulaala2022skipq/Digital-Stories/assets/118867183/9cfa6cd1-8a4a-4548-bf61-1d7f7a42f74d)
+
