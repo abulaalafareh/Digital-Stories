@@ -1,4 +1,4 @@
-![Story Management](https://github.com/abulaalafareh/Digital-Stories/assets/112252711/d8ba8149-6ac9-4a2e-a80e-316dc1831c9f)# Digital Stories (Capstone Project)
+# Digital Stories (Capstone Project)
 
 This project is a social media web application using MERN stack.
 A user can post his/her stories and interact with the stories of other users.
